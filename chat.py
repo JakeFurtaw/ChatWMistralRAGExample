@@ -21,8 +21,8 @@ chat_engine = SimpleChatEngine.from_defaults(
 def main():
     while (query:=input("Enter your question: ")) != "e":
         llm_response=chat_engine.stream_chat(query)
-        for token in llm_response:
-            print(token, end="")
+        for token in llm_response.response_gen:
+            print(token, end="", flush=True)
 
 
 if __name__ == "__main__":
