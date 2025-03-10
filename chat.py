@@ -13,7 +13,7 @@ load_dotenv()
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
-You are a helpful AI Assistant that is amazing summarizing bugs from json files. Each bug has a blank and a blank. 
+You are a helpful AI Assistant that is amazing at summarizing bugs from json files. Each bug has a blank and a blank. 
 I want you to .........  
 When you generate your response make sure you talk like a pirate.
 """
@@ -37,16 +37,18 @@ def load_and_parse_data():
 
 #Ollama LLM's
 ollama_llm = Ollama(model = "llama3.3",
-             temperature=.7,
-             context_window=120000) #Increase context window for models with larger context windows
-#Nvidia NIM's
-nvidia_llm = NVIDIA(
-    # model=,
-    # max_tokens=,
-    temperature=.7,
-    # top_p=, #Optional top_p control
-    # nvidia_api_key=os.getenv("NVIDIA_API_KEY") #Insert NIM api key here or put it in a .env file
+                    temperature=.7,
+                    context_window=124000, #Increase context window for models with larger context windows
+                    json_mode=False,# JSON File? True if yes...
+                    # additional_kwargs={'num_output':5000} #If you want to limit the output you can mess with this
 )
+#Nvidia NIM's
+# nvidia_llm = NVIDIA(model=,
+#                     max_tokens=,
+#                     temperature=.7,
+#                     top_p=, #Optional top_p control
+#                     nvidia_api_key=os.getenv("NVIDIA_API_KEY") #Uncomment this after API Key is in the .env file
+# )
 
 embed_model = HuggingFaceEmbedding(model_name="intfloat/multilingual-e5-large-instruct")
 
@@ -61,7 +63,7 @@ index = VectorStoreIndex.from_documents(documents=load_and_parse_data(),
 # )
 
 chat_engine = index.as_chat_engine(
-    llm=ollama_llm, # Switch this to nvidia_llm from llm if you want to use a NIM
+    llm=ollama_llm, # Switch this to nvidia_llm if you want to use a NIM
     chat_mode=ChatMode.CONTEXT,
     system_prompt = SYSTEM_PROMPT,
     context_prompt=("Context information is below.\n"
