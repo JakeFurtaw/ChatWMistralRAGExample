@@ -2,6 +2,9 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.nvidia import NVIDIA
+from llama_parse import LlamaParse
+import os, glob
 # from llama_index.core.chat_engine import SimpleChatEngine
 # from llama_index.core.chat_engine.context import ContextChatEngine
 # from llama_index.core.retrievers import BaseRetriever
@@ -12,17 +15,40 @@ You are a helpful AI Assistant that is amazing at coding. You have extensive kno
 coding languages. When you generate your response make sure you talk like a pirate.
 """
 
-def load_data():
-    doc = SimpleDirectoryReader(input_dir=DATA_PATH).load_data()
+def load_and_parse_data():
+    parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
+    supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html", ".json"]
+    doc = []
+    all_files = glob.glob(os.path.join(DATA_PATH, "**", "*"), recursive=True)
+    all_files = [f for f in all_files if os.path.isfile(f)]
+    for file in all_files:
+        file_extension = os.path.splitext(file)[1].lower()
+        if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
+            file_extractor = {file_extension: parser}
+            doc.extend(
+                SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data())
+        else:
+            doc.extend(SimpleDirectoryReader(input_files=[file]).load_data())
     return doc
 
+
+#Ollama LLM's
 llm = Ollama(model = "llama3.3",
-             temperature=.7)
+             temperature=.7,
+             context_window=32000) #Increase context window for models with larger context windows
+#Nvidia NIM's
+nvidia_llm = NVIDIA(
+    # model=,
+    # max_tokens=,
+    temperature=.7,
+    # top_p=, #Optional top_p control
+    # nvidia_api_key=os.getenv("NVIDIA_API_KEY") #Insert NIM api key here or put it in a .env file
+)
 
 embed_model = HuggingFaceEmbedding(model_name="intfloat/multilingual-e5-large-instruct")
 
 
-index = VectorStoreIndex.from_documents(documents=load_data(),
+index = VectorStoreIndex.from_documents(documents=load_and_parse_data(),
                                         embed_model=embed_model)
 
 # chat_engine = SimpleChatEngine.from_defaults(
