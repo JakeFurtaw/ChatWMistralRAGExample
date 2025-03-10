@@ -39,7 +39,7 @@ def load_and_parse_data():
 ollama_llm = Ollama(model = "llama3.3",
                     temperature=.7,
                     context_window=124000, #Increase context window for models with larger context windows
-                    json_mode=False,# JSON File? True if yes...
+                    json_mode=False,# Not sure what this does might turn responses to json format
                     # additional_kwargs={'num_output':5000} #If you want to limit the output you can mess with this
 )
 #Nvidia NIM's
