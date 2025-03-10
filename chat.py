@@ -10,8 +10,9 @@ import os, glob
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
-You are a helpful AI Assistant that is amazing at coding. You have extensive knowledge about various old and new 
-coding languages. When you generate your response make sure you talk like a pirate.
+You are a helpful AI Assistant that is amazing summarizing bugs from json files. Each bug has a blank and a blank. 
+I want you to .........  
+When you generate your response make sure you talk like a pirate.
 """
 
 def load_and_parse_data():
