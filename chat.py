@@ -12,7 +12,8 @@ load_dotenv()
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
-You are a helpful AI Assistant that is amazing at summarizing bugs from json files. Each bug has a blank and a blank. 
+You are a helpful AI Assistant that is amazing at summarizing bug reports from json files. 
+Each bug has a blank and a blank. 
 I want you to .........  
 When you generate your response make sure you talk like a pirate.
 """
