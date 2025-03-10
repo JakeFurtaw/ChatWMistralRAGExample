@@ -33,7 +33,7 @@ def load_and_parse_data():
 
 
 #Ollama LLM's
-llm = Ollama(model = "llama3.3",
+ollama_llm = Ollama(model = "llama3.3",
              temperature=.7,
              context_window=32000) #Increase context window for models with larger context windows
 #Nvidia NIM's
@@ -58,7 +58,7 @@ index = VectorStoreIndex.from_documents(documents=load_and_parse_data(),
 # )
 
 chat_engine = index.as_chat_engine(
-    llm=llm,
+    llm=ollama_llm, # Switch this to nvidia_llm from llm if you want to use a NIM
     chat_mode=ChatMode.CONTEXT,
     system_prompt = SYSTEM_PROMPT,
     context_prompt=("Context information is below.\n"
