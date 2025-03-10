@@ -43,9 +43,9 @@ ollama_llm = Ollama(model = "llama3.3",
 )
 #Nvidia NIM's
 # nvidia_llm = NVIDIA(model=,
-#                     max_tokens=,
+#                     # max_tokens=,
 #                     temperature=.7,
-#                     top_p=, #Optional top_p control
+#                     # top_p=, #Optional top_p control
 #                     nvidia_api_key=os.getenv("NVIDIA_API_KEY") #Uncomment this after API Key is in the .env file
 # )
 
