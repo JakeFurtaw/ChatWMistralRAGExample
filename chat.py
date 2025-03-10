@@ -6,7 +6,6 @@ from llama_index.llms.nvidia import NVIDIA
 from llama_parse import LlamaParse
 import os, glob
 from dotenv import load_dotenv
-# from llama_index.core.chat_engine import SimpleChatEngine
 # from llama_index.core.chat_engine.context import ContextChatEngine
 
 load_dotenv()
