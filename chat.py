@@ -7,7 +7,6 @@ from llama_parse import LlamaParse
 import os, glob
 # from llama_index.core.chat_engine import SimpleChatEngine
 # from llama_index.core.chat_engine.context import ContextChatEngine
-# from llama_index.core.retrievers import BaseRetriever
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
