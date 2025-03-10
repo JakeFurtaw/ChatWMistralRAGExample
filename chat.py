@@ -5,8 +5,11 @@ from llama_index.llms.ollama import Ollama
 from llama_index.llms.nvidia import NVIDIA
 from llama_parse import LlamaParse
 import os, glob
+from dotenv import load_dotenv
 # from llama_index.core.chat_engine import SimpleChatEngine
 # from llama_index.core.chat_engine.context import ContextChatEngine
+
+load_dotenv()
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
@@ -35,7 +38,7 @@ def load_and_parse_data():
 #Ollama LLM's
 ollama_llm = Ollama(model = "llama3.3",
              temperature=.7,
-             context_window=32000) #Increase context window for models with larger context windows
+             context_window=120000) #Increase context window for models with larger context windows
 #Nvidia NIM's
 nvidia_llm = NVIDIA(
     # model=,
@@ -76,6 +79,8 @@ def main():
         llm_response=chat_engine.stream_chat(query)
         for token in llm_response.response_gen:
             print(token, end="", flush=True)
+        print('\n'+('-'*60))
+        print('\n')
 
 
 if __name__ == "__main__":
