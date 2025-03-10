@@ -19,7 +19,6 @@ When you generate your response make sure you talk like a pirate.
 """
 
 def load_and_parse_data():
-    parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
     supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html", ".json"]
     doc = []
     all_files = glob.glob(os.path.join(DATA_PATH, "**", "*"), recursive=True)
@@ -27,6 +26,7 @@ def load_and_parse_data():
     for file in all_files:
         file_extension = os.path.splitext(file)[1].lower()
         if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
+            parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
             file_extractor = {file_extension: parser}
             doc.extend(
                 SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data())
@@ -40,7 +40,7 @@ ollama_llm = Ollama(model = "llama3.3",
                     temperature=.7,
                     context_window=124000, #Increase context window for models with larger context windows
                     json_mode=False,# Not sure what this does might turn responses to json format
-                    # additional_kwargs={'num_output':5000} #If you want to limit the output you can mess with this
+                    # additional_kwargs={'num_output':500} #If you want to limit the output you can mess with this
 )
 #Nvidia NIM's
 # nvidia_llm = NVIDIA(model=,
@@ -52,15 +52,8 @@ ollama_llm = Ollama(model = "llama3.3",
 
 embed_model = HuggingFaceEmbedding(model_name="intfloat/multilingual-e5-large-instruct")
 
-
 index = VectorStoreIndex.from_documents(documents=load_and_parse_data(),
                                         embed_model=embed_model)
-
-# chat_engine = SimpleChatEngine.from_defaults(
-#     #retriever=BaseRetriever,
-#     llm=llm,
-#     system_prompt=SYSTEM_PROMPT,
-# )
 
 chat_engine = index.as_chat_engine(
     llm=ollama_llm, # Switch this to nvidia_llm if you want to use a NIM
