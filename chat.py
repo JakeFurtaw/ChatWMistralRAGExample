@@ -2,7 +2,8 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
-from llama_index.llms.nvidia import NVIDIA
+# from llama_index.llms.huggingface import HuggingFaceLLM
+# from llama_index.llms.nvidia import NVIDIA
 from llama_parse import LlamaParse
 import os, glob
 from dotenv import load_dotenv
@@ -36,12 +37,12 @@ def load_and_parse_data():
 
 
 #Ollama LLM's
-ollama_llm = Ollama(model = "mistral-nemo:latest",
+ollama_llm = Ollama(model = "llama3.3:70b",
                     request_timeout=30.0,
                     temperature=.7,
-                    keep_alive=5, # this arg kills the model right after the question is asked
-                    context_window=110000, #Increase context window for models with larger context windows
-                    additional_kwargs={'num_ctx':110000}
+                    keep_alive=30, # this arg kills the model right after the question is asked
+                    context_window=120000, #Increase context window for models with larger context windows
+                    additional_kwargs={'num_ctx':120000}
 )
 #Nvidia NIM's
 # nvidia_llm = NVIDIA(model=,
