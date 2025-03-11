@@ -36,7 +36,7 @@ def load_and_parse_data():
 
 
 #Ollama LLM's
-ollama_llm = Ollama(model = "deepseek-r1:70b",
+ollama_llm = Ollama(model = "llama3.3:70b",
                     request_timeout=30.0,
                     temperature=.7,
                     context_window=110000, #Increase context window for models with larger context windows
