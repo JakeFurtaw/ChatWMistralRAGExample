@@ -12,10 +12,10 @@ load_dotenv()
 
 DATA_PATH = "data"
 SYSTEM_PROMPT = """
-You are a helpful AI Assistant that is amazing at summarizing bug reports from json files. 
-Each bug has a blank and a blank. 
-I want you to .........  
-When you generate your response make sure you talk like a pirate.
+You are a helpful AI Assistant that is an expert at looking through json files for data to help university students get around campus.
+You are en expert at locating faculty and other staff information like office numbers, emails, and phone numbers. Locations of 
+departments, university amenities, and other services. You are also an expert at finding information about different majors
+students might be using and classes that are required for them. Please be clear and concise with your answers. 
 """
 
 def load_and_parse_data():
@@ -24,21 +24,22 @@ def load_and_parse_data():
     all_files = glob.glob(os.path.join(DATA_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
     for file in all_files:
-        file_extension = os.path.splitext(file)[1].lower()
-        if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
-            parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
-            file_extractor = {file_extension: parser}
-            doc.extend(
-                SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data())
-        else:
-            doc.extend(SimpleDirectoryReader(input_files=[file]).load_data())
+        # file_extension = os.path.splitext(file)[1].lower()
+        # if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
+        #     parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
+        #     file_extractor = {file_extension: parser}
+        #     doc.extend(
+        #         SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data())
+        # else:
+        doc.extend(SimpleDirectoryReader(input_files=[file]).load_data())
     return doc
 
 
 #Ollama LLM's
-ollama_llm = Ollama(model = "llama3.3",
+ollama_llm = Ollama(model = "mistral-nemo:latest",
+                    request_timeout=30.0,
                     temperature=.7,
-                    context_window=124000, #Increase context window for models with larger context windows
+                    context_window=110000, #Increase context window for models with larger context windows
                     json_mode=False,# Not sure what this does might turn responses to json format
                     # additional_kwargs={'num_output':500} #If you want to limit the output you can mess with this
 )
