@@ -36,11 +36,11 @@ def load_and_parse_data():
 
 
 #Ollama LLM's
-ollama_llm = Ollama(model = "llama3.3:70b",
+ollama_llm = Ollama(model = "mistral-nemo:latest",
                     request_timeout=30.0,
                     temperature=.7,
+                    keep_alive=.5,
                     context_window=110000, #Increase context window for models with larger context windows
-                    json_mode=False,# Not sure what this does might turn responses to json format
                     # additional_kwargs={'num_output':500} #If you want to limit the output you can mess with this
 )
 #Nvidia NIM's
