@@ -39,9 +39,9 @@ def load_and_parse_data():
 ollama_llm = Ollama(model = "mistral-nemo:latest",
                     request_timeout=30.0,
                     temperature=.7,
-                    keep_alive=.5,
+                    keep_alive=5, # this arg kills the model right after the question is asked
                     context_window=110000, #Increase context window for models with larger context windows
-                    # additional_kwargs={'num_output':500} #If you want to limit the output you can mess with this
+                    additional_kwargs={'num_ctx':110000}
 )
 #Nvidia NIM's
 # nvidia_llm = NVIDIA(model=,
