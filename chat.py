@@ -2,11 +2,12 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
+import os, glob, torch
+from dotenv import load_dotenv
 # from llama_index.llms.huggingface import HuggingFaceLLM
 # from llama_index.llms.nvidia import NVIDIA
 from llama_parse import LlamaParse
-import os, glob
-from dotenv import load_dotenv
+
 # from llama_index.core.chat_engine.context import ContextChatEngine
 
 load_dotenv()
@@ -18,6 +19,9 @@ You are en expert at locating faculty and other staff information like office nu
 departments, university amenities, and other services. You are also an expert at finding information about different majors
 students might be using and classes that are required for them. Please be clear and concise with your answers. 
 """
+
+def set_device(gpu: int = None) -> str:
+    return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
 def load_and_parse_data():
     supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html", ".json"]
@@ -37,12 +41,10 @@ def load_and_parse_data():
 
 
 #Ollama LLM's
-ollama_llm = Ollama(model = "llama3.3:70b",
-                    request_timeout=30.0,
+ollama_llm = Ollama(model = "mistral-nemo:latest",
+                    request_timeout=60.0,
                     temperature=.7,
-                    keep_alive=30, # this arg kills the model right after the question is asked
-                    context_window=120000, #Increase context window for models with larger context windows
-                    additional_kwargs={'num_ctx':120000}
+                    context_window=120000 #Increase context window for models with larger context windows
 )
 #Nvidia NIM's
 # nvidia_llm = NVIDIA(model=,
