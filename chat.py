@@ -24,7 +24,7 @@ def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
 def load_and_parse_data():
-    supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html", ".json"]
+    supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html"]
     doc = []
     all_files = glob.glob(os.path.join(DATA_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
